@@ -27,10 +27,11 @@ class _RiderTileState extends State<RiderTile> {
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.endToStart) {
             appState.rejectCurrentRider(rider: widget.rider);
+            return true;
           } else {
             appState.approveCurrentRider(rider: widget.rider);
+            return false;
           }
-          return true;
         },
         child: InkWell(
           onTap: () {

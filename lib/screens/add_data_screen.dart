@@ -3,6 +3,7 @@ import 'package:grow_simplee_assignment/app/app_state.dart';
 import 'package:grow_simplee_assignment/models/user_details.dart';
 import 'package:grow_simplee_assignment/screens/add_document_screen.dart';
 import 'package:grow_simplee_assignment/screens/widgets/dialogs.dart';
+import 'package:grow_simplee_assignment/utils/snackbar.dart';
 import 'package:provider/provider.dart';
 
 class AddRaiderDataScreen extends StatefulWidget {
@@ -14,6 +15,10 @@ class AddRaiderDataScreen extends StatefulWidget {
 
 class _AddRaiderDataScreenState extends State<AddRaiderDataScreen> {
   final _form = GlobalKey<FormState>();
+
+  List<String> _localities = [];
+
+  List<String> values = ['Pulgaon', 'ASda', 'fdfca', 'dvd', 'dcada'];
 
   final _nameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
@@ -28,6 +33,11 @@ class _AddRaiderDataScreenState extends State<AddRaiderDataScreen> {
       return;
     }
 
+    if (_localities.length < 3) {
+      showSnackBar(context, 'Please add 3 localities');
+      return;
+    }
+
     final appState = Provider.of<AppState>(context, listen: false);
     appState.setEditingRider();
     appState.addUserDetails(
@@ -35,7 +45,7 @@ class _AddRaiderDataScreenState extends State<AddRaiderDataScreen> {
         name: _nameController.text,
         phoneNumber: _phoneNumberController.text,
         address: _addressController.text,
-        localities: [],
+        localities: _localities,
         bankAccountNumber: _banckAccountContoller.text,
         ifcsNumber: _ifscController.text,
         pincode: _pincodeController.text,
@@ -112,6 +122,7 @@ class _AddRaiderDataScreenState extends State<AddRaiderDataScreen> {
                         }
                         return null;
                       }),
+                  _buildLocalityDropdown(),
                   _buildTextField(
                       title: 'Current Pincode',
                       hintText: '442306',
@@ -191,6 +202,47 @@ class _AddRaiderDataScreenState extends State<AddRaiderDataScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildLocalityDropdown() {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.deepPurple),
+      ),
+      child: ExpansionTile(
+        title: const Text('Localities'),
+        children: values.map((e) => _buildLocality(e)).toList(),
+      ),
+    );
+  }
+
+  Widget _buildLocality(String val) {
+    return StatefulBuilder(builder: (context, ss) {
+      return InkWell(
+        onTap: () {
+          ss(() {
+            if (_localities.contains(val)) {
+              _localities.remove(val);
+            } else {
+              _localities.add(val);
+            }
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Text(
+            val,
+            style: TextStyle(
+              fontSize: 16,
+              color:
+                  _localities.contains(val) ? Colors.deepPurple : Colors.black,
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   Widget _buildNextButton() {

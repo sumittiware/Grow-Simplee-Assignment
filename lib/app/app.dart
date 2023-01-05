@@ -14,7 +14,8 @@ class App extends StatelessWidget {
         ChangeNotifierProvider.value(value: AppState()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        title: 'Grow Simplee Assignment',
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),
